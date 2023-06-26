@@ -44,22 +44,11 @@ def getList():
     return True
 
 def base_exchange():
-    #base_curr = input("What base currency would you like to start with: ")
-    #exchange_curr = input("What currency would you like to exchange to: ")
-    #exchange_rate = connection.execute(db.text("""SELECT * FROM exchange WHERE row = base_curr 
-    #AND column = exchange_curr"""))
-    text2 = "Select * FROM exchange WHERE exchange.Currency = usd" 
-    df = pd.read_sql(text2, con=engine)
-    print(df.loc[0].at['usd'])
-    #with engine.connect() as connection:
-        
-        #print(text2)
-        #query_result = connection.execute(db.text(text2))
-        #print(query_result)
-        
-        #print(query_result)  
-        #print(pd.DataFrame(query_result))
-    #print(f"{base_curr} to {exchange_curr} has an exchange rate of: {exchange_rate}")
+    base = input("What base currency would you like to start with: ")
+    exchange = input("What currency would you like to exchange to: ")
+    sql = "Select " + exchange +  " FROM exchange WHERE " + base + " = 1;" 
+    df = pd.read_sql(sql, con=engine).iat[0,0]
+    print(f"{base} to {exchange} has an exchange rate of: {df} {exchange} for 1 {base}")
 
 def main():
     while True:
