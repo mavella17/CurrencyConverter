@@ -78,8 +78,7 @@ def main():
         elif base == "V":
             printDB()
         elif base == "B":
-            print("base")
-            #base_exchange()
+            base_exchange()
         else:
             print("Invalid Command, Try Again!")
         

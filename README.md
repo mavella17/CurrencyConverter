@@ -1,5 +1,5 @@
 # Currency-API Project for SEO Week 2
-![Checkstyle](https://github.com/mavella17/W2_Project/actions/workflows/main.yml/badge.svg)
+![Checkstyle](https://github.com/mavella17/W2_Project/actions/workflows/main.yaml/badge.svg)
 
 ![Unit Tests](https://github.com/mavella17/W2_Project/actions/workflows/test.yaml/badge.svg)
 ## Required Libraries:
