@@ -2,7 +2,7 @@ import requests
 import pprint
 import pandas as pd
 import sqlalchemy as db
-from sqlalchemy import delete
+from sqlalchemy import select
 from sqlalchemy.sql import text as sa_text
 
 
@@ -44,14 +44,21 @@ def getList():
     return True
 
 def base_exchange():
-    base_curr = input("What base currency would you like to start with: ")
-    exchange_curr = input("What currency would you like to exchange to: ")
+    #base_curr = input("What base currency would you like to start with: ")
+    #exchange_curr = input("What currency would you like to exchange to: ")
     #exchange_rate = connection.execute(db.text("""SELECT * FROM exchange WHERE row = base_curr 
     #AND column = exchange_curr"""))
-    with engine.connect() as connection:
-        text2 = "Select "+ exchange_curr + " From exchange"
-        query_result = connection.execute(db.text(text2)).fetchall()
-        print(pd.DataFrame(query_result))
+    text2 = "Select * FROM exchange WHERE exchange.Currency = usd" 
+    df = pd.read_sql(text2, con=engine)
+    print(df.loc[0].at['usd'])
+    #with engine.connect() as connection:
+        
+        #print(text2)
+        #query_result = connection.execute(db.text(text2))
+        #print(query_result)
+        
+        #print(query_result)  
+        #print(pd.DataFrame(query_result))
     #print(f"{base_curr} to {exchange_curr} has an exchange rate of: {exchange_rate}")
 
 def main():
