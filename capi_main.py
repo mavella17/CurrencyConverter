@@ -27,23 +27,32 @@ def updateDB():
             first = False
         else:
             d.to_sql('exchange', con=engine, if_exists='append', index=False)
-
+    return True
 
 def printDB():
     with engine.connect() as connection:
         query_result = connection.execute(db.text("""SELECT * FROM
         exchange;""")).fetchall()
         print(pd.DataFrame(query_result))
+        return True
+    return False
 
 def getList():
     listofCurr = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json'
     currList = requests.get(listofCurr)
     pprint.pprint(currList.json())
+    return True
 
-def base():
-
-
-
+def base_exchange():
+    base_curr = input("What base currency would you like to start with: ")
+    exchange_curr = input("What currency would you like to exchange to: ")
+    #exchange_rate = connection.execute(db.text("""SELECT * FROM exchange WHERE row = base_curr 
+    #AND column = exchange_curr"""))
+    with engine.connect() as connection:
+        text2 = "Select "+ exchange_curr + " From exchange"
+        query_result = connection.execute(db.text(text2)).fetchall()
+        print(pd.DataFrame(query_result))
+    #print(f"{base_curr} to {exchange_curr} has an exchange rate of: {exchange_rate}")
 
 def main():
     while True:
@@ -68,8 +77,9 @@ def main():
             printDB()
         elif base == "V":
             printDB()
-        elif base =="B":
-            print("TEsting")
+        elif base == "B":
+            print("base")
+            #base_exchange()
         else:
             print("Invalid Command, Try Again!")
         
