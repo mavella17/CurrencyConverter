@@ -41,7 +41,7 @@ def getList():
     pprint.pprint(currList.json())
 
 def base():
-    
+
 
 
 
@@ -69,7 +69,7 @@ def main():
         elif base == "V":
             printDB()
         elif base =="B":
-            print("Placeholder")
+            print("TEsting")
         else:
             print("Invalid Command, Try Again!")
         
