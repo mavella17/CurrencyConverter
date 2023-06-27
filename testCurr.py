@@ -26,9 +26,13 @@ class TestFileName(unittest.TestCase):
 
     def testBaseExchange(self):
         url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/'
-        url += 'currency-api@1/latest/currencies/eur/jpy.json'
-        r = requests.get(url).json()['jpy']
-        self.assertEqual(base_exchange('eur', 'jpy'), r)
+        urlbase = url + 'currency-api@1/latest/currencies/'
+        r = requests.get(urlbase + 'eur/jpy.json').json()['jpy']
+        self.assertEqual(base_exchange('eur', 'jpy', 1), r)
+        r = requests.get(urlbase + 'usd/gbp.json').json()['gbp']
+        self.assertEqual(base_exchange('usd', 'gbp', 45), 45 * r)
+        r = requests.get(urlbase + 'usd/gbp.json').json()['gbp']
+        self.assertEqual(base_exchange('usd', 'gbp', -45), -45 * r)
 
 
 if __name__ == '__main__':

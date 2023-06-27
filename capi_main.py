@@ -50,23 +50,41 @@ def getList():
     return True
 
 
-def base_exchange(b=None, e=None):
+def base_exchange(b=None, e=None, a=None):  # parameters are only for testing
     if not b:
         b = input("What base currency would you like to start with: ").lower()
     else:
         b = b.lower()
-    while not checkValidCurrency(b):
+    while not checkValidCurrency(b) or b.lower() == 'all':
         b = input("Not a valid currency, please try again: ").lower()
     if not e:
-        e = input("What currency would you like to exchange to: ").lower()
+        print("What currency would you like to exchange to?")
+        e = input("Input \"ALL\" for conversions in every currency: ").lower()
     else:
         e = e.lower()
     while not checkValidCurrency(e):
         e = input("Not a valid currency, please try again: ").lower()
-    sql = "Select " + e + " FROM exchange WHERE " + b + " = 1;"
-    df = pd.read_sql(sql, con=engine).iat[0, 0]
-    print(f"{b} to {e} has an exchange rate of: {df} {e} for 1.00 {b}")
-    return df
+
+    if not a and e != 'all':
+        while True:
+            try:
+                a = float(input(f"Enter an amount of {b} to convert to {e}: "))
+                break
+            except ValueError:
+                print("Please only input numbers")
+                continue
+
+    if e == 'all':
+        sql = "Select * FROM exchange WHERE " + b + " = 1;"
+        df = pd.read_sql(sql, con=engine)
+        res = df.loc[df['Currency'] == b]
+        print(res)
+        return res
+    else:
+        sql = "Select " + e + " FROM exchange WHERE " + b + " = 1;"
+        df = pd.read_sql(sql, con=engine).iat[0, 0]
+        print(f"{a} {b} converted to {e} would be {a * df} {e}")
+        return df * a
 
 
 def checkValidCurrency(curr):
@@ -77,7 +95,7 @@ def checkValidCurrency(curr):
         currencies = requests.get(url).json()
         currencies.pop('1inch')
     curr = curr.lower()
-    if curr in currencies:
+    if curr in currencies or curr.upper() == 'ALL':
         return True
     return False
 
@@ -89,7 +107,8 @@ def main():
         print("---------")
         print("Input B to input a base currency")
         print("Input U to update the exchange rate database")
-        print("Inpuy V to view the exchange rate database")
+        print("Input V to view the exchange rate database")
+        print("Input A to input a base currency and amount")
         print("Input Q to quit")
         print("Input L to list all currencies and their acronyms")
         base = input("Type command here: ")
@@ -106,6 +125,8 @@ def main():
             printDB()
         elif base == "B":
             base_exchange()
+        elif base == "A":
+            amount_exchange()
         else:
             print("Invalid Command, Try Again!")
 
