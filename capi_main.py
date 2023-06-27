@@ -8,12 +8,13 @@ from sqlalchemy.sql import text as sa_text
 
 
 engine = db.create_engine('sqlite:///currency.db')
-
+currencies = None
 
 def updateDB():
-    listofCurr = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json'
-    currList = requests.get(listofCurr)
-    currList = currList.json().keys()
+    url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json'
+    currList = requests.get(url).json()
+    currList.pop("1inch")
+    currList = currList.keys()
     url = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/"
     first = True
     for currency in currList:
@@ -21,6 +22,7 @@ def updateDB():
         rates = r.json()[currency]
         firstColumn = {'Currency':currency, 'Date Updated':r.json()['date']}
         firstColumn.update(rates)
+        firstColumn.pop('1inch')
         d = pd.DataFrame(firstColumn, index=[0])
         if first:
             d.to_sql('exchange', con=engine, if_exists='replace', index=False)
@@ -38,19 +40,38 @@ def printDB():
     return False
 
 def getList():
-    listofCurr = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json'
-    currList = requests.get(listofCurr)
-    pprint.pprint(currList.json())
+    url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json'
+    currList = requests.get(url).json()
+    currList.pop('1inch')
+    pprint.pprint(currList)
     return True
 
+
+
 def base_exchange():
-    base = input("What base currency would you like to start with: ")
-    exchange = input("What currency would you like to exchange to: ")
+    base = input("What base currency would you like to start with: ").lower()
+    while not checkValidCurrency(base):
+        base = input("Not a valid currency, please try again: ").lower()
+    exchange = input("What currency would you like to exchange to: ").lower()
+    while not checkValidCurrency(exchange):
+        exchange = input("Not a valid currency, please try again: ").lower()
+    
     sql = "Select " + exchange +  " FROM exchange WHERE " + base + " = 1;" 
     df = pd.read_sql(sql, con=engine).iat[0,0]
-    print(f"{base} to {exchange} has an exchange rate of: {df} {exchange} for 1 {base}")
+    print(f"{base} to {exchange} has an exchange rate of: {df} {exchange} for 1.00 {base}")
+
+def checkValidCurrency(curr):
+    global currencies
+    if not currencies:
+        url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json'
+        currencies = requests.get(url).json()
+        currencies.pop('1inch')
+    if curr in currencies:
+        return True
+    return False
 
 def main():
+    
     while True:
         print("---------")
         print("Commands:")

@@ -8,10 +8,10 @@ class TestFileName(unittest.TestCase):
 	#These first 3 test cases only verify they run without errors
 	#Not much other testing can be done here
     def testUpdate(self):
-	assertEquals(updateDB(), True)
+	    assertEquals(updateDB(), True)
     def testPrint(self):
         assertEquals(printDB(), True)
     def testList(self):
-	assertEquals(getList(), True)
+	    assertEquals(getList(), True)
 if __name__ == '__main__':
     unittest.main()
