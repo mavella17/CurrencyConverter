@@ -4,20 +4,20 @@ import pandas as pd
 import sqlalchemy as db
 from sqlalchemy import select
 from sqlalchemy.sql import text as sa_text
-
-
-
 engine = db.create_engine('sqlite:///currency.db')
 currencies = None
 
+
 def updateDB():
-    url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json'
+    url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/'
+    url += 'currency-api@1/latest/currencies.json'
     currList = requests.get(url).json()
     currList.pop("1inch")
     currList = currList.keys()
-    url = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/"
+    url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/'
+    url += 'currency-api@1/latest/currencies/'
     first = True
-    for currency in currList:
+    for currency in currList: 
         r = requests.get(url + currency + ".json")
         rates = r.json()[currency]
         firstColumn = {'Currency':currency, 'Date Updated':r.json()['date']}
@@ -40,7 +40,8 @@ def printDB():
     return False
 
 def getList():
-    url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json'
+    url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/'
+    url += 'currency-api@1/latest/currencies.json'
     currList = requests.get(url).json()
     currList.pop('1inch')
     pprint.pprint(currList)
@@ -48,22 +49,29 @@ def getList():
 
 
 
-def base_exchange():
-    base = input("What base currency would you like to start with: ").lower()
-    while not checkValidCurrency(base):
-        base = input("Not a valid currency, please try again: ").lower()
-    exchange = input("What currency would you like to exchange to: ").lower()
-    while not checkValidCurrency(exchange):
-        exchange = input("Not a valid currency, please try again: ").lower()
-    
-    sql = "Select " + exchange +  " FROM exchange WHERE " + base + " = 1;" 
+def base_exchange(b=None,e=None):
+    if not b:
+        b = input("What base currency would you like to start with: ").lower()
+    else:
+        b = b.lower()
+    while not checkValidCurrency(b):
+        b = input("Not a valid currency, please try again: ").lower()
+    if not e:
+        e = input("What currency would you like to exchange to: ").lower()
+    else:
+        e = e.lower()
+    while not checkValidCurrency(e):
+        e = input("Not a valid currency, please try again: ").lower()
+    sql = "Select " + e +  " FROM exchange WHERE " + b + " = 1;" 
     df = pd.read_sql(sql, con=engine).iat[0,0]
-    print(f"{base} to {exchange} has an exchange rate of: {df} {exchange} for 1.00 {base}")
-
+    print(f"{b} to {e} has an exchange rate of: {df} {e} for 1.00 {b}")
+    return df
+    
 def checkValidCurrency(curr):
     global currencies
     if not currencies:
-        url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json'
+        url = 'https://cdn.jsdelivr.net/gh/fawazahm'
+        url += 'ed0/currency-api@1/latest/currencies.json'
         currencies = requests.get(url).json()
         currencies.pop('1inch')
     if curr in currencies:
@@ -100,6 +108,5 @@ def main():
             print("Invalid Command, Try Again!")
         
         
-
 if __name__ == "__main__":
     main()
