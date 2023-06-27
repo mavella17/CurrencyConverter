@@ -9,8 +9,8 @@ class TestFileName(unittest.TestCase):
 
     # These first 3 test cases only verify they run without errors
     # Not much other testing can be done here
-    # def testUpdate(self):
-    #    self.assertEqual(updateDB(), True)
+    def testUpdate(self):
+        self.assertEqual(updateDB(), True)
 
     def testPrint(self):
         self.assertEqual(printDB(), True)
