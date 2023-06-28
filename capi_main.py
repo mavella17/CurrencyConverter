@@ -8,11 +8,12 @@ engine = db.create_engine('sqlite:///currency.db')
 currencies = None
 
 
+# Updates the database with the latest currencies. Should be run once daily
 def updateDB():
     url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/'
     url += 'currency-api@1/latest/currencies.json'
     currList = requests.get(url).json()
-    currList.pop("1inch")
+    currList.pop("1inch")  # excluded because of several issues
     currList = currList.keys()
     url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/'
     url += 'currency-api@1/latest/currencies/'
@@ -22,7 +23,7 @@ def updateDB():
         rates = r.json()[currency]
         firstColumn = {'Currency': currency, 'Date Updated': r.json()['date']}
         firstColumn.update(rates)
-        firstColumn.pop('1inch')
+        firstColumn.pop('1inch')  # not liked by sql for some reason
         d = pd.DataFrame(firstColumn, index=[0])
         if first:
             d.to_sql('exchange', con=engine, if_exists='replace', index=False)
@@ -32,16 +33,16 @@ def updateDB():
     return True
 
 
+# Prints the current database
 def printDB():
-    while True:
-        with engine.connect() as connection:
-            query_result = connection.execute(db.text("""SELECT * FROM
-            exchange;""")).fetchall()
-            print(pd.DataFrame(query_result))
-            return True
-        return False
+    with engine.connect() as connection:
+        query_result = connection.execute(db.text("""SELECT * FROM
+        exchange;""")).fetchall()
+        print(pd.DataFrame(query_result))
+        return True
 
 
+# Gets a list of active currencies
 def getList():
     url = 'https://cdn.jsdelivr.net/gh/fawazahmed0/'
     url += 'currency-api@1/latest/currencies.json'
@@ -51,44 +52,64 @@ def getList():
     return True
 
 
-def base_exchange(b=None, e=None, a=None):  # parameters are only for testing
-    if not b:
-        b = input("What base currency would you like to start with: ").lower()
+# Main code, allows currency lookups,convert base currency to exchange currency
+def base_exchange(baseCurr=None, exCurr=None, amount=None):
+    if not baseCurr:
+        baseCurr = input("Input base currency: ").lower()
     else:
-        b = b.lower()
-    while not checkValidCurrency(b) or b.lower() == 'all':
-        b = input("Not a valid currency, please try again: ").lower()
-    if not e:
+        baseCurr = baseCurr.lower()
+    while not checkValidCurrency(baseCurr) or baseCurr.lower() == 'all':
+        baseCurr = input("Not a valid currency, please try again: ").lower()
+    if not exCurr:
         print("What currency would you like to exchange to?")
-        e = input("Input \"ALL\" for conversions in every currency: ").lower()
+        exCurr = input("Input \"ALL\" for all excahnge rates: ").lower()
     else:
-        e = e.lower()
-    while not checkValidCurrency(e):
-        e = input("Not a valid currency, please try again: ").lower()
+        exCurr = exCurr.lower()
+    while not checkValidCurrency(exCurr):
+        exCurr = input("Not a valid currency, please try again: ").lower()
 
-    if not a and e != 'all':
+    if not amount and exCurr != 'all':
         while True:
             try:
-                a = float(input(f"Enter an amount of {b} to convert to {e}: "))
+                amount = float(input(f"Enter an amount of {baseCurr}: "))
                 break
             except ValueError:
                 print("Please only input numbers")
                 continue
 
-    if e == 'all':
-        sql = "Select * FROM exchange WHERE " + b + " = 1;"
+    if exCurr == 'all':
+        sql = "Select * FROM exchange WHERE " + baseCurr + " = 1;"
         df = pd.read_sql(sql, con=engine)
-        res = df.loc[df['Currency'] == b]
+        res = df.loc[df['Currency'] == baseCurr]
         res = res.transpose()
-        print(res)
-        return res
+        range = 17
+        acceptable_inputs = ["yes", "y", "no", "n"]
+        print(res[0:range])
+        while not(range > len(res) - 15):
+            range += 15
+            ans = input("Print next 15 rows? (Yes/No): ").lower()
+            while ans not in acceptable_inputs:
+                ans = input("Please enter valid input (Yes/No): ").lower()
+            if ans in acceptable_inputs[0:2]:
+                print(res[range - 15: range])
+            elif ans in acceptable_inputs[2:4]:
+                break
+        if len(res) - 15 < range:
+            ans = input("Print remaining rows? (Yes/No): ").lower()
+            while ans not in acceptable_inputs:
+                ans = input("Please enter valid input (yes or no): ").lower()
+            if ans in acceptable_inputs[0:2]:
+                print(res[range:])
+        return True
     else:
-        sql = "Select " + e + " FROM exchange WHERE " + b + " = 1;"
-        df = pd.read_sql(sql, con=engine).iat[0, 0]
-        print(f"{a} {b} converted to {e} would be {a * df} {e}")
-        return df * a
+        sql = "Select " + exCurr + " FROM exchange WHERE " + baseCurr + " = 1;"
+        rate = pd.read_sql(sql, con=engine).iat[0, 0]
+        res = rate * amount
+        print(f"{amount} {baseCurr} converted to {exCurr} is {res} {exCurr}")
+        return rate * amount
 
 
+# determines if currency acronym is valid
 def checkValidCurrency(curr):
     global currencies
     if not currencies:
