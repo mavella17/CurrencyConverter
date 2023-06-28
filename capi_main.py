@@ -33,12 +33,13 @@ def updateDB():
 
 
 def printDB():
-    with engine.connect() as connection:
-        query_result = connection.execute(db.text("""SELECT * FROM
-        exchange;""")).fetchall()
-        print(pd.DataFrame(query_result))
-        return True
-    return False
+    while True:
+        with engine.connect() as connection:
+            query_result = connection.execute(db.text("""SELECT * FROM
+            exchange;""")).fetchall()
+            print(pd.DataFrame(query_result))
+            return True
+        return False
 
 
 def getList():
