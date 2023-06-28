@@ -78,6 +78,7 @@ def base_exchange(b=None, e=None, a=None):  # parameters are only for testing
         sql = "Select * FROM exchange WHERE " + b + " = 1;"
         df = pd.read_sql(sql, con=engine)
         res = df.loc[df['Currency'] == b]
+        res = res.transpose()
         print(res)
         return res
     else:
@@ -112,20 +113,21 @@ def main():
         print("Input L to list all currencies and their acronyms")
         base = input("Type command here: ")
         base = base.upper()
-        if base == "L":
-            getList()
-        elif base == "Q":
-            print("Quitting!")
-            break
-        elif base == "U":
-            updateDB()
-            printDB()
-        elif base == "V":
-            printDB()
-        elif base == "B":
-            base_exchange()
-        else:
-            print("Invalid Command, Try Again!")
+        match base:
+            case "L":
+                getList()
+            case "Q":
+                print("Quitting!")
+                break
+            case "U":
+                updateDB()
+                printDB()
+            case "V":
+                printDB()
+            case "B":
+                base_exchange()
+            case _:
+                print("Invalid Command, Try Again!")
 
 
 if __name__ == "__main__":
