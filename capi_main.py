@@ -131,8 +131,8 @@ def main():
         print("Input B to input a base currency")
         print("Input U to update the exchange rate database")
         print("Input V to view the exchange rate database")
-        print("Input Q to quit")
         print("Input L to list all currencies and their acronyms")
+        print("Input Q to quit")
         base = input("Type command here: ")
         base = base.upper()
         match base:
