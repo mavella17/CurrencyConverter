@@ -128,7 +128,7 @@ def main():
         print("---------")
         print("Commands:")
         print("---------")
-        print("Input B to input a base currency")
+        print("Input B to input a base currency conversion")
         print("Input U to update the exchange rate database")
         print("Input V to view the exchange rate database")
         print("Input L to list all currencies and their acronyms")
