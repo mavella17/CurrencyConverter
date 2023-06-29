@@ -62,7 +62,7 @@ def base_exchange(baseCurr=None, exCurr=None, amount=None):
         baseCurr = input("Not a valid currency, please try again: ").lower()
     if not exCurr:
         print("What currency would you like to exchange to?")
-        exCurr = input("Input \"ALL\" for all excahnge rates: ").lower()
+        exCurr = input("Input \"ALL\" for all exchange rates: ").lower()
     else:
         exCurr = exCurr.lower()
     while not checkValidCurrency(exCurr):
@@ -105,6 +105,7 @@ def base_exchange(baseCurr=None, exCurr=None, amount=None):
         sql = "Select " + exCurr + " FROM exchange WHERE " + baseCurr + " = 1;"
         rate = pd.read_sql(sql, con=engine).iat[0, 0]
         res = rate * amount
+        print()
         print(f"{amount} {baseCurr} converted to {exCurr} is {res} {exCurr}")
         return rate * amount
 
