@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container px-4 center m-0 mt-5" id="hanging-icons">
+    <h2 class="pb-2 border-bottom">Features</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-4">
+      <div class="col d-flex align-items-start">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"></use></svg>
+        </div>
+        <div>
+          <h3 class="fs-2 text-body-emphasis">250+ Supported Currencies</h3>
+          <p>This tool supports a variety of different currenciences, both physical and digital</p>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <svg class="bi" width="1em" height="1em"><use xlink:href="#cpu-fill"></use></svg>
+        </div>
+        <div>
+          <h3 class="fs-2 text-body-emphasis">Updated Daily</h3>
+          <p>Exchange rates are updated at least once a day, ensuring up to date conversions!</p>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <svg class="bi" width="1em" height="1em"><use xlink:href="#tools"></use></svg>
+        </div>
+        <div>
+          <h3 class="fs-2 text-body-emphasis">Single Conversions</h3>
+          <p>Convert a specific amount of base currency into an exchange currency</p>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
+        <div class="icon-square text-body-emphasis bg-body-secondary d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <svg class="bi" width="1em" height="1em"><use xlink:href="#tools"></use></svg>
+        </div>
+        <div>
+          <h3 class="fs-2 text-body-emphasis">Multiple Exchange Rates</h3>
+          <p>Get all 250+ exchange rates from a base currency!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container container-fluid bg-accent border-bottom">
+  <div class="p-5 text-center bg-body-tertiary">
+    <div class="container py-5">
+      <h1 class="text-body-emphasis">Convert Now!</h1>
+      <p class="col-lg-8 mx-auto lead">
+      Click below to begin a conversion!
+      </p>
+      <button class="btn btn-primary px-5 mb-5 button" type="button">
+      Convert!
+    </button>
+    </div>
+  </div>
+</div>
+{% endblock content %}
