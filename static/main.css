@@ -17,6 +17,12 @@ h1, h2, h3, h4, h5, h6 {
   border-color: #dbb16b;
 }
 
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #C58940;
+    border-color: #dbb16b; /*set the color you want here*/
+}
+
 .bg-accent{
   background-color: #EEEEE8;
   width: 1500px;

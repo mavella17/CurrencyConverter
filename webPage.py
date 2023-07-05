@@ -9,5 +9,9 @@ app.config['SECRET_KEY'] = '5e3ed03ed43c30693e1a3d191463aaff'
 def home():
     return render_template('home.html', subtitle='Home Page', text='This is the home page')
 
+@app.route("/convert")
+def convert():
+    return render_template('convert.html', subtitle='Conversion Page', text='This is the conversion page')
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
