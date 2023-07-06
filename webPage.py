@@ -19,6 +19,7 @@ class User(db.Model):
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
 
+
 with app.app_context():
     db.create_all()
 
