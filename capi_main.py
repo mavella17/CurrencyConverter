@@ -85,7 +85,7 @@ def base_exchange(baseCurr=None, exCurr=None, amount=None):
         range = 17
         acceptable_inputs = ["yes", "y", "no", "n"]
         print(res[0:range])
-        while not(range > len(res) - 15):
+        while not (range > len(res) - 15):
             range += 15
             ans = input("Print next 15 rows? (Yes/No): ").lower()
             while ans not in acceptable_inputs:
