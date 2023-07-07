@@ -2,6 +2,7 @@
 ![Checkstyle](https://github.com/mavella17/CurrencyConverter/actions/workflows/main.yaml/badge.svg)
 
 ![Unit Tests](https://github.com/mavella17/CurrencyConverter/actions/workflows/test.yaml/badge.svg)
+![More Tests](https://github.com/mavella17/CurrencyConverter/actions/workflows/test2.yaml/badge.svg)
 ## Required Libraries:
 - SQLAlchemy
 - requests
